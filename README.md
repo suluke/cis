@@ -28,6 +28,7 @@ int main() {
 * As much as I hate it, template literals have to be wrapped by a preprocessor macro (`CIS`)
 * There is no support (yet) for having `::compile` `constexpr`, i.e. in case that all your interpolated variables are known during comilation,
   the final string still has to be concatenated during runtime
+* Behavior on illegal input hasn't been tested at all yet. Error handling is a task kept for later
 
 ## About
 Working on a [sibling project](github.com/luckyxxl/hfg-webcam-particles) of our webapp [hfg-particles](https://github.com/suluke/hfg-particles) 
