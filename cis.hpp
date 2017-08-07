@@ -121,7 +121,7 @@ private:
       ++pos;
     }
     const_cast<str_view_t &>(static_cast<const ret_t &>(result)[idx]) = {
-        str + begin, pos - begin - 1};
+        str + begin, pos - begin};
     ++idx;
     if (insidePlaceholder || idx != shard_count)
       throw "Placeholder not correctly closed";
