@@ -77,3 +77,14 @@ install(
   EXPORT ${CIS_TARGETS_EXPORT_NAME}
   DESTINATION ${CIS_CONFIG_INSTALL_DIR}
 )
+
+##
+## SCRIPTS
+## custom targets to facilitate development, such as
+## * run clang-format on cis.hpp
+##
+add_custom_target(cis-update-format
+  clang-format -i -style=LLVM ./cis.hpp
+  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+  COMMENT "Format all source files. Requires clang-format to be installed"
+)
