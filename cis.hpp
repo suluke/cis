@@ -10,13 +10,44 @@
 namespace cis {
 
 /**
+ * Constructs strings from many built-in types so to-string-conversion
+ * can happen implicitly.
+ */
+class StringCast {
+  using string = std::string;
+  string storage;
+  std::experimental::string_view str;
+
+public:
+  StringCast(string str)
+      : storage(std::move(str)), str(storage.data(), storage.size()) {}
+  template <size_t N>
+  StringCast(const char (&L)[N]) : storage(), str(L, N - 1) {}
+  template <typename T>
+  StringCast(T t)
+      : storage(std::to_string(t)), str(storage.data(), storage.size()) {}
+
+  StringCast() = default;
+  StringCast(const StringCast &) = default;
+  StringCast(StringCast &&) = default;
+  StringCast &operator=(const StringCast &) = default;
+  StringCast &operator=(StringCast &&) = default;
+
+  operator std::experimental::string_view const &() const { return str; }
+};
+
+std::ostream &operator<<(std::ostream &os, const StringCast &S) {
+  return os << static_cast<std::experimental::string_view>(S);
+}
+
+/**
  * A template implementation which does almost all work during compile
  * time. Requires to know the template during compilation, of course.
  */
 template <unsigned shard_count> class ConstexprTemplate {
   friend class TemplateLiteralParser;
   using str_view_t = std::experimental::string_view;
-  using subst_t = std::map<str_view_t, std::string>;
+  using subst_t = std::map<str_view_t, StringCast>;
   using shards_t = std::array<str_view_t, shard_count>;
   using identifiers_t = std::array<str_view_t, shard_count - 1>;
 
